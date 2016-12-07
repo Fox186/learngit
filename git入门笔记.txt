@@ -1,0 +1,141 @@
+1.自报家门	
+	$ git config --global user.name "Your Name"
+	$ git config --global user.email "email@example.com"
+
+
+2.创建版本库
+2.1创建空目录
+	$ mkdir learngit
+	$ cd learngit
+	$ pwd
+	/c/Users/Mr.Fox/learngit
+
+2.2通过git init命令把这个目录变成Git可以管理的仓库
+	$ git init
+	Initialized empty Git repository in C:/Users/Mr.Fox/learngit/.git/
+
+
+3.把文件添加到版本库
+3.1编写一个readme.txt文件(windows自带文本文件可能有问题)
+	内容：
+	Git is a version control system.
+	Git is free software.
+	放到learngit目录下（子目录也行）
+
+3.2用命令git add告诉Git，把文件添加到仓库：
+	$ git add readme.txt
+
+3.3用命令git commit告诉Git，把文件提交到仓库：
+	$ git commit -m"wrote a readme file"
+	[master (root-commit) b163098] wrote a readme file
+ 	1 file changed, 2 insertions(+)
+ 	create mode 100644 readme.txt
+
+
+4.时光穿梭
+4.1更新版本
+	$ git status
+	$ git diff //查看difference，显示的格式正是Unix通用的diff格式，可显示变化
+4.2版本回退
+	$ git log
+	$ git log --pretty=oneline
+	$ git reset --hard HEAD^
+	$ cat readme.txt
+	$ git reset --hard 3628164 
+	$ git reflog
+4.3工作区和暂存区
+4.4管理修改
+	$ git diff HEAD -- readme.txt//查看工作区和版本库里面最新版本的区别
+	第一次修改 -> git add -> 第二次修改 -> git add -> git commit
+4.5撤销修改
+	$ git checkout -- file//丢弃工作区的修改
+
+	$ git reset HEAD file//丢弃提交到暂存区的内容。再执行上一步操作。
+
+	当已经提交了不合适的修改到版本库时，且没有推送到远程库，想要撤销本次提交，参考4.2版本回退
+4.6删除文件
+	$ rm test.txt
+	$ git rm test.txt
+	$ git commit -m "remove test.txt"
+	恢复文件参考4.2，4.5
+
+
+5.远程仓库
+5.1添加远程仓库
+	$ git remote add origin git@github.com:Fox186/learngit.git
+	$ git push -u origin master
+5.2从远程库克隆
+	创建一个新的仓库，名字叫gitskills,勾选Initialize this repository with a README
+	$ git clone git@github.com:Fox186/gitskills.git
+
+
+6.分值管理
+6.1创建与合并分之
+	$ git branch 		查看分支
+	$ git branch <name>	创建分支
+	$ git checkout <name>	切换分支
+	$ git checkout -b <name>创建+切换分支
+	$ git merge <name>	合并某分支到当前分支
+	$ git branch -d <name>	删除分支
+6.2解决冲突
+	$ git checkout -b feature1
+	$ git add readme.txt 
+	$ git commit -m "AND simple"
+	$ git checkout master
+	$ git add readme.txt 
+	$ git commit -m "& simple"
+	$ git merge feature1
+	$ git status
+	$ git add readme.txt 
+	$ git commit -m "conflict fixed"
+	$ git log --graph --pretty=oneline --abbrev-commit
+	$ git branch -d feature1
+6.3分值管理策略
+	$ git checkout -b dev
+	$ git add readme.txt 
+	$ git commit -m "add merge"
+	$ git checkout master
+	$ git merge --no-ff -m "merge with no-ff" dev
+	$ git log --graph --pretty=oneline --abbrev-commit
+6.4Bug分支
+	$ git stash
+	$ git stash list
+	$ git stash pop
+	$ git stash list
+	$ git stash apply stash@{0}
+6.5多人协作
+	查看远程库信息，使用git remote -v；
+
+	本地新建的分支如果不推送到远程，对其他人就是不可见的；
+
+	从本地推送分支，使用git push origin branch-name，如果推送失败，先用git pull抓取远程的新提交；
+
+	在本地创建和远程分支对应的分支，使用git checkout -b branch-name origin/branch-name，本地和远程分支的名称最好一致；
+
+	建立本地分支和远程分支的关联，使用git branch --set-upstream branch-name origin/branch-name；
+
+	从远程抓取分支，使用git pull，如果有冲突，要先处理冲突。
+
+
+7标签管理
+7.1创建标签
+	命令git tag <name>用于新建一个标签，默认为HEAD，也可以指定一个commit id；
+
+	git tag -a <tagname> -m "blablabla..."可以指定标签信息；
+
+	git tag -s <tagname> -m "blablabla..."可以用PGP签名标签；
+
+命令git tag可以查看所有标签。
+7.2操作标签
+	命令git push origin <tagname>可以推送一个本地标签；
+
+	命令git push origin --tags可以推送全部未推送过的本地标签；
+
+	命令git tag -d <tagname>可以删除一个本地标签；
+
+	命令git push origin :refs/tags/<tagname>可以删除一个远程标签。
+
+
+8自定义
+	$ git config --global alias.st status
+	...
