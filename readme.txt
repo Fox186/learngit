@@ -4,3 +4,4 @@ Git has a mutable index called stage.
 Git tracks changes of files 2.
 My boss is a super stupid dumb ass.
 this is test of branch-master.
+this is test of branch-dev.
